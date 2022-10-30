@@ -3,6 +3,7 @@ import { addTodo, checkTodo, clearCompleted, fetchTodos } from './todoAPI';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import { RootState } from '../../app/store';
+import { stat } from 'fs';
 
 export enum TodoItemsStatus{
     Idle = 'idle',
@@ -60,6 +61,7 @@ export const addTodoAsync = createAsyncThunk(
 );
 
 export const selectTodoItems = (state: RootState) => state.todo.todoItems;
+export const selectLeftCount = (state: RootState) => state.todo.todoItems.filter(n=>!n.done).length;
 
 
 export const todoSlice = createSlice({
@@ -89,7 +91,8 @@ export const todoSlice = createSlice({
       })
       .addCase(checkTodoAsync.fulfilled, (state,action) => {
         state.status = TodoItemsStatus.Idle;
-        let item = state.todoItems.find(n=>n.id === action.payload.id)
+        let item = state.todoItems.filter(n=>n.id === action.payload.id)
+        item[0].done = action.payload.done;
       })
       .addCase(clearCompletedAsync.pending, (state) => {
         state.status = TodoItemsStatus.Loading;

@@ -1,4 +1,11 @@
-import { addTodoAsync, checkTodoAsync, clearCompletedAsync, fetchTodoAsync, selectTodoItems } from "./todoSlice";
+import {
+addTodoAsync,
+checkTodoAsync,
+clearCompletedAsync,
+fetchTodoAsync,
+selectLeftCount,
+selectTodoItems
+} from "./todoSlice";
 
 import React from "react";
 import { TodoItemsFilterState } from "./models";
@@ -9,6 +16,7 @@ import { useState } from "react";
 
 export function Todo(){
     const items = useAppSelector(selectTodoItems);
+    const itemsLeft = useAppSelector(selectLeftCount);
     let [newText, setNetText] = useState('');
     let dispatch = useAppDispatch();
     useEffect(() => {
@@ -20,6 +28,7 @@ export function Todo(){
         dispatch(fetchTodoAsync(  e.target.value as TodoItemsFilterState))
     }
     return(<div>
+        <div>Itmes left: {itemsLeft}</div>
         <div>
             <input value={newText} onChange={e=>setNetText(e.target.value)}></input>
             <button onClick={e=>{dispatch(addTodoAsync(newText)); setNetText('')}}>add</button>

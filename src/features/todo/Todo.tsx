@@ -1,6 +1,7 @@
 import { addTodoAsync, checkTodoAsync, fetchTodoAsync, selectTodoItems } from "./todoSlice";
 
 import React from "react";
+import { TodoItemsFilterState } from "./models";
 import { useAppDispatch } from "../../app/hooks";
 import { useAppSelector } from "../../app/hooks";
 import { useEffect } from "react";
@@ -11,10 +12,13 @@ export function Todo(){
     let [newText, setNetText] = useState('');
     let dispatch = useAppDispatch();
     useEffect(() => {
-        dispatch(fetchTodoAsync())
+        dispatch(fetchTodoAsync(TodoItemsFilterState.All))
     }, 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []);
+    function handleFilterChanged(e:React.ChangeEvent<HTMLInputElement>){
+        dispatch(fetchTodoAsync(  e.target.value as TodoItemsFilterState))
+    }
     return(<div>
         <div>
             <input value={newText} onChange={e=>setNetText(e.target.value)}></input>
@@ -28,5 +32,11 @@ export function Todo(){
                 <label>{item.text}</label>
             </div>
         ))}
+        <div>
+            <label>All</label><input type="radio" name="filter" value={TodoItemsFilterState.All} defaultChecked={true} onChange={handleFilterChanged}></input>
+            <label>Active</label><input type="radio" name="filter" value={TodoItemsFilterState.Active}  onChange={handleFilterChanged}></input>
+            <label>Completed</label><input type="radio" name="filter" value={TodoItemsFilterState.Completed} onChange={handleFilterChanged} ></input>
+
+        </div>
     </div>)
 }

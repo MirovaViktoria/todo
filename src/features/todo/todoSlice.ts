@@ -1,15 +1,9 @@
+import { ITodoItem, TodoItemsFilterState } from './models';
 import { RootState, store } from '../../app/store';
 import { addTodo, checkTodo, fetchTodos } from './todoAPI';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import { AppDispatch } from './../../app/store';
-import { ITodoItem } from './models';
-
-export enum TodoItemsFilterState{
-    All = 'all',
-    Active = 'active',
-    Completed = 'completed'
-}
 
 export enum TodoItemsStatus{
     Idle = 'idle',
@@ -18,7 +12,6 @@ export enum TodoItemsStatus{
 
 export interface TodoState {
     todoItems: Array<ITodoItem>;
-    filterState: TodoItemsFilterState,
     status: TodoItemsStatus;
 }
 
@@ -30,14 +23,13 @@ export interface TodoCheck{
 
 const initialState: TodoState = {
   todoItems: [],
-  status: TodoItemsStatus.Idle,
-  filterState: TodoItemsFilterState.All
+  status: TodoItemsStatus.Idle
 };
 
 export const fetchTodoAsync = createAsyncThunk(
   'todo/fetchTodos',
-  async () => {
-    const response = await fetchTodos();
+  async (filter:TodoItemsFilterState) => {
+    const response = await fetchTodos(filter);
     return response;
   }
 );
@@ -59,6 +51,7 @@ export const addTodoAsync = createAsyncThunk(
 );
 
 export const selectTodoItems = (state: RootState) => state.todo.todoItems;
+
 
 export const todoSlice = createSlice({
   name: 'todo',

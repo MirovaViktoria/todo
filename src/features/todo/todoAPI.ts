@@ -1,7 +1,7 @@
-import { ITodoItem, LocalStorageKeys } from "./models";
+import { ITodoItem, LocalStorageKeys, TodoItemsFilterState } from "./models";
 
 //get all
-export function fetchTodos() {
+export function fetchTodos(filter:TodoItemsFilterState) {
   return new Promise<Array<ITodoItem>>((resolve) =>
     {
         let items:Array<ITodoItem> = [];
@@ -9,6 +9,17 @@ export function fetchTodos() {
         if(value!=null){
             items = JSON.parse(value);
         }
+        switch(filter){
+          case TodoItemsFilterState.All:
+          break;
+          case TodoItemsFilterState.Active:
+            items = items.filter(n=>!n.done);
+          break;
+          case TodoItemsFilterState.Completed:
+            items = items.filter(n=>n.done);
+          break;
+        }
+
         setTimeout(() => resolve(items), 500)
     }
   );
@@ -52,8 +63,6 @@ export function addTodo(text:string){
   );
 }
 
-//todo: clear
-//todo: active
-//todo: update
-//todo: add
-//todo: completed
+//todo: clear active
+//todo: active filter
+//todo: completed filter

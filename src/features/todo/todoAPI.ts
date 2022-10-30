@@ -63,6 +63,17 @@ export function addTodo(text:string){
   );
 }
 
-//todo: clear active
-//todo: active filter
-//todo: completed filter
+export function clearCompleted(){
+  return new Promise<Array<ITodoItem>>((resolve) =>
+    {
+        let items:Array<ITodoItem> = []
+        let value = localStorage.getItem(LocalStorageKeys.todoItemsKey);
+        if(value!=null){
+            items = JSON.parse(value);
+        }
+        items = items.filter(n=>!n.done);
+        localStorage.setItem(LocalStorageKeys.todoItemsKey,  JSON.stringify(items));
+        setTimeout(() => resolve(items), 500)
+    }
+  );
+}

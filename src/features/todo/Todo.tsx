@@ -1,4 +1,4 @@
-import { addTodoAsync, checkTodoAsync, fetchTodoAsync, selectTodoItems } from "./todoSlice";
+import { addTodoAsync, checkTodoAsync, clearCompletedAsync, fetchTodoAsync, selectTodoItems } from "./todoSlice";
 
 import React from "react";
 import { TodoItemsFilterState } from "./models";
@@ -37,6 +37,9 @@ export function Todo(){
             <label>Active</label><input type="radio" name="filter" value={TodoItemsFilterState.Active}  onChange={handleFilterChanged}></input>
             <label>Completed</label><input type="radio" name="filter" value={TodoItemsFilterState.Completed} onChange={handleFilterChanged} ></input>
 
+        </div>
+        <div>
+            <button onClick={e=>dispatch(clearCompletedAsync())}>clear completed</button>
         </div>
     </div>)
 }

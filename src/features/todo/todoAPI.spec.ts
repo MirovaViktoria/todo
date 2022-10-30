@@ -1,5 +1,5 @@
 import { ITodoItem, LocalStorageKeys, TodoItemsFilterState } from './models';
-import { addTodo, checkTodo, fetchTodos } from "./todoAPI";
+import { addTodo, checkTodo, clearCompleted, fetchTodos } from "./todoAPI";
 
 describe('Todo API', ()=>{
     it('Shuold return items from local storage', async function (){
@@ -99,5 +99,27 @@ describe('Todo API', ()=>{
         //Assert
         expect(result.length).toEqual(1);
         expect(result[0].id).toEqual(2);
+    });
+
+     it('Should clean checked items', async function(){
+        //Arrange
+        let item : ITodoItem ={
+            id: 1,
+            done: false,
+            text: 'some desc'
+        };
+        let item2 : ITodoItem ={
+            id: 2,
+            done: true,
+            text: 'some desc'
+        };
+        localStorage.setItem(LocalStorageKeys.todoItemsKey,  JSON.stringify([item, item2]));   
+
+        //act
+        let result = await clearCompleted()
+
+        //Assert
+        expect(result.length).toEqual(1);
+        expect(result[0].id).toEqual(1);
     });
 })

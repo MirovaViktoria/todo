@@ -1,9 +1,8 @@
 import { ITodoItem, TodoItemsFilterState } from './models';
-import { RootState, store } from '../../app/store';
-import { addTodo, checkTodo, fetchTodos } from './todoAPI';
+import { addTodo, checkTodo, clearCompleted, fetchTodos } from './todoAPI';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
-import { AppDispatch } from './../../app/store';
+import { RootState } from '../../app/store';
 
 export enum TodoItemsStatus{
     Idle = 'idle',
@@ -41,6 +40,16 @@ export const checkTodoAsync = createAsyncThunk(
     return response;
   }
 );
+
+
+export const clearCompletedAsync = createAsyncThunk(
+  'todo/clearTodo',
+  async () => {
+    const response = await clearCompleted();
+    return response;
+  }
+);
+
 
 export const addTodoAsync = createAsyncThunk(
   'todo/addTodo',
@@ -81,7 +90,13 @@ export const todoSlice = createSlice({
       .addCase(checkTodoAsync.fulfilled, (state,action) => {
         state.status = TodoItemsStatus.Idle;
         let item = state.todoItems.find(n=>n.id === action.payload.id)
-        console.log(item)
+      })
+      .addCase(clearCompletedAsync.pending, (state) => {
+        state.status = TodoItemsStatus.Loading;
+      })
+      .addCase(clearCompletedAsync.fulfilled, (state,action) => {
+        state.status = TodoItemsStatus.Idle;
+        state.todoItems = action.payload
       })
   },
 });

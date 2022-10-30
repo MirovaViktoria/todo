@@ -62,6 +62,7 @@ export const addTodoAsync = createAsyncThunk(
 
 export const selectTodoItems = (state: RootState) => state.todo.todoItems;
 export const selectLeftCount = (state: RootState) => state.todo.todoItems.filter(n=>!n.done).length;
+export const selectStatus = (state: RootState) => state.todo.status;
 
 
 export const todoSlice = createSlice({

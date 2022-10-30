@@ -1,7 +1,8 @@
+import { AppThunk, RootState } from '../../app/store';
+import { addTodo, fetchTodos } from './todoAPI';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+
 import { ITodoItem } from './models';
-import { fetchTodos } from './todoAPI';
-import { RootState, AppThunk } from '../../app/store';
 
 export enum TodoItemsFilterState{
     All = 'all',
@@ -29,7 +30,17 @@ const initialState: TodoState = {
 export const fetchTodoAsync = createAsyncThunk(
   'todo/fetchTodos',
   async () => {
+        console.log('sss');
+
     const response = await fetchTodos();
+    return response;
+  }
+);
+
+export const addTodoAsync = createAsyncThunk(
+  'todo/addTodo',
+  async (text:string) => {
+    const response = await addTodo(text);
     return response;
   }
 );

@@ -1,21 +1,28 @@
+import { addTodoAsync, fetchTodoAsync, selectTodoItems } from "./todoSlice";
+
+import React from "react";
+import { useAppDispatch } from "../../app/hooks";
+import { useAppSelector } from "../../app/hooks";
 import { useEffect } from "react";
 import { useState } from "react";
-import { useAppDispatch } from "../../app/hooks";
-import { fetchTodoAsync, selectTodoItems } from "./todoSlice";
-import { useAppSelector } from "../../app/hooks";
+
 export function Todo(){
     const items = useAppSelector(selectTodoItems);
-
+    let [newText, setNetText] = useState('');
     let dispatch = useAppDispatch();
     useEffect(() => {
-        dispatch(fetchTodoAsync)
+        dispatch(fetchTodoAsync())
     }, 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []);
     return(<div>
+        <div>
+            <input value={newText} onChange={e=>setNetText(e.target.value)}></input>
+            <button onClick={e=>dispatch(addTodoAsync(newText))}>add</button>
+        </div>
         {items.map((item) =>(
             <div key={item.id}>
-                <input defaultChecked={item.done}>
+                <input defaultChecked={item.done} type="checkbox">
                 </input>
                 <label>{item.text}</label>
             </div>

@@ -1,5 +1,5 @@
 import { RootState, store } from '../../app/store';
-import { addTodo, fetchTodos } from './todoAPI';
+import { addTodo, checkTodo, fetchTodos } from './todoAPI';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import { AppDispatch } from './../../app/store';
@@ -22,9 +22,15 @@ export interface TodoState {
     status: TodoItemsStatus;
 }
 
+export interface TodoCheck{
+  id: number,
+  isDone: boolean
+}
+
+
 const initialState: TodoState = {
   todoItems: [],
-  status: TodoItemsStatus.Loading,
+  status: TodoItemsStatus.Idle,
   filterState: TodoItemsFilterState.All
 };
 
@@ -32,6 +38,14 @@ export const fetchTodoAsync = createAsyncThunk(
   'todo/fetchTodos',
   async () => {
     const response = await fetchTodos();
+    return response;
+  }
+);
+
+export const checkTodoAsync = createAsyncThunk(
+  'todo/checkTodo',
+  async (request:TodoCheck) => {
+    const response = await checkTodo(request.id, request.isDone);
     return response;
   }
 );
@@ -67,6 +81,14 @@ export const todoSlice = createSlice({
       .addCase(addTodoAsync.fulfilled, (state,action) => {
         state.status = TodoItemsStatus.Idle;
         state.todoItems = [...state.todoItems, action.payload]
+      })
+      .addCase(checkTodoAsync.pending, (state) => {
+        state.status = TodoItemsStatus.Loading;
+      })
+      .addCase(checkTodoAsync.fulfilled, (state,action) => {
+        state.status = TodoItemsStatus.Idle;
+        let item = state.todoItems.find(n=>n.id === action.payload.id)
+        console.log(item)
       })
   },
 });

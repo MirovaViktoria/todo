@@ -1,4 +1,4 @@
-import { addTodoAsync, fetchTodoAsync, selectTodoItems } from "./todoSlice";
+import { addTodoAsync, checkTodoAsync, fetchTodoAsync, selectTodoItems } from "./todoSlice";
 
 import React from "react";
 import { useAppDispatch } from "../../app/hooks";
@@ -22,7 +22,8 @@ export function Todo(){
         </div>
         {items.map((item) =>(
             <div key={item.id}>
-                <input defaultChecked={item.done} type="checkbox">
+                <input defaultChecked={item.done} type="checkbox" 
+                onChange={e=>dispatch(checkTodoAsync({id: item.id,isDone: e.target.checked}))}>
                 </input>
                 <label>{item.text}</label>
             </div>

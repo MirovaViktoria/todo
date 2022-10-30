@@ -18,7 +18,7 @@ export function Todo(){
     return(<div>
         <div>
             <input value={newText} onChange={e=>setNetText(e.target.value)}></input>
-            <button onClick={e=>dispatch(addTodoAsync(newText))}>add</button>
+            <button onClick={e=>{dispatch(addTodoAsync(newText)); setNetText('')}}>add</button>
         </div>
         {items.map((item) =>(
             <div key={item.id}>

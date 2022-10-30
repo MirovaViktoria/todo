@@ -1,7 +1,8 @@
-import { AppThunk, RootState } from '../../app/store';
+import { RootState, store } from '../../app/store';
 import { addTodo, fetchTodos } from './todoAPI';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
+import { AppDispatch } from './../../app/store';
 import { ITodoItem } from './models';
 
 export enum TodoItemsFilterState{
@@ -30,8 +31,6 @@ const initialState: TodoState = {
 export const fetchTodoAsync = createAsyncThunk(
   'todo/fetchTodos',
   async () => {
-        console.log('sss');
-
     const response = await fetchTodos();
     return response;
   }
@@ -61,6 +60,13 @@ export const todoSlice = createSlice({
       .addCase(fetchTodoAsync.fulfilled, (state, action) => {
         state.status = TodoItemsStatus.Idle;
         state.todoItems = action.payload;
+      })
+      .addCase(addTodoAsync.pending, (state) => {
+        state.status = TodoItemsStatus.Loading;
+      })
+      .addCase(addTodoAsync.fulfilled, (state,action) => {
+        state.status = TodoItemsStatus.Idle;
+        state.todoItems = [...state.todoItems, action.payload]
       })
   },
 });

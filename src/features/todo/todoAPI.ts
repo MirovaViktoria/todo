@@ -16,7 +16,7 @@ export function fetchTodos() {
 }
 
 export function addTodo(text:string){
-  return new Promise((resolve) =>
+  return new Promise<ITodoItem>((resolve) =>
     {
       
         let items:Array<ITodoItem> = []
@@ -24,9 +24,10 @@ export function addTodo(text:string){
         if(value!=null){
             items = JSON.parse(value);
         }
-        items.push({id: items.length, done: false, text: text});
+        let newItem:ITodoItem = {id: items.length, done: false, text: text};
+        items.push(newItem);
         localStorage.setItem(LocalStorageKeys.todoItemsKey,  JSON.stringify(items));
-        setTimeout(() => resolve(items), 500)
+        setTimeout(() => resolve(newItem), 500)
     }
   );
 }

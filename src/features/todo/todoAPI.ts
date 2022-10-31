@@ -55,7 +55,7 @@ export function addTodo(text:string){
         if(value!=null){
             items = JSON.parse(value);
         }
-        let newItem:ITodoItem = {id: items.length, done: false, text: text};
+        let newItem:ITodoItem = {id: Math.max(...items.map(n=>n.id)) , done: false, text: text};
         items.push(newItem);
         localStorage.setItem(LocalStorageKeys.todoItemsKey,  JSON.stringify(items));
         setTimeout(() => resolve(newItem), 500)

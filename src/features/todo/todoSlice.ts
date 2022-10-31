@@ -3,7 +3,8 @@ import { addTodo, checkTodo, clearCompleted, fetchTodos } from './todoAPI';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import { RootState } from '../../app/store';
-import { stat } from 'fs';
+
+// import { stat } from 'fs';
 
 export enum TodoItemsStatus{
     Idle = 'idle',
